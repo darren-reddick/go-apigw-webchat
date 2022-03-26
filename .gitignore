@@ -1,0 +1,6 @@
+.serverless
+bin
+node_modules/
+
+.vscode
+./NOTES.md

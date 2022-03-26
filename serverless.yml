@@ -1,0 +1,142 @@
+service: go-apigw-webchat
+
+plugins:
+  - serverless-iam-roles-per-function
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: go1.x
+  lambdaHashingVersion: 20201221
+  region: eu-west-1
+  websocketsApiName: chat-api
+  websocketsApiRouteSelectionExpression: $request.body.action # custom routes are selected by the value of the action property in the body
+  logs:
+    websocket: true
+  eventBridge:
+    useCloudFormation: true
+  iam:
+    role:
+      managedPolicies:
+      - 'arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess'
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      # Restrict our IAM role permissions to
+      # the specific table for the stage
+      Resource:
+        - "Fn::GetAtt": [ connectionIdTable, Arn ]
+    - Effect: Allow
+      Action:
+        - events:PutEvents
+      Resource:
+        - "Fn::GetAtt": [ chatBus, Arn ]
+  environment:
+    WEBSOCKET_URL: {
+      "Fn::Join":["",[
+        "https://",
+          {
+            "Ref": "WebsocketsApi"
+          },
+          ".execute-api.",
+          { "Ref" : "AWS::Region"},
+          ".",
+          { "Ref": "AWS::URLSuffix" },
+          "/",
+          "${opt:stage}"
+      ]]
+    }
+    DYNAMO_DB_TABLE: ${self:custom.dynamoTableName}
+
+
+custom:
+  dynamoTableName: ConnectionIdTable-${opt:stage}
+  chatBusName: chatBus-${opt:stage}
+
+package:
+  patterns:
+    - '!./**'
+    - ./bin/**
+
+functions:
+  connectHandler:
+    handler: bin/connectHandler
+    events:
+      - websocket:
+          route: $connect
+    environment:
+      DYNAMO_DB_TABLE: ${self:custom.dynamoTableName}
+      CHAT_EVENT_BUS: ${self:custom.chatBusName}
+  broadcastHandler:
+    handler: bin/broadcastHandler
+    events:
+      - websocket:
+          route: broadcast
+    environment:
+      DYNAMO_DB_TABLE: ${self:custom.dynamoTableName}
+      CHAT_EVENT_BUS: ${self:custom.chatBusName}
+  listHandler:
+    handler: bin/listHandler
+    events:
+      - websocket:
+          route: list
+    environment:
+      DYNAMO_DB_TABLE: ${self:custom.dynamoTableName}
+      CHAT_EVENT_BUS: ${self:custom.chatBusName}
+  chatHandler:
+    handler: bin/chatHandler
+    events:
+      - websocket:
+          route: chat
+    environment:
+      DYNAMO_DB_TABLE: ${self:custom.dynamoTableName}
+      CHAT_EVENT_BUS: ${self:custom.chatBusName}
+  disconnectHandler:
+    handler: bin/disconnectHandler
+    events:
+      - websocket:
+          route: $disconnect
+    environment:
+      DYNAMO_DB_TABLE: ${self:custom.dynamoTableName}
+  manageHandler:
+    handler: bin/manageHandler
+    events:
+    - eventBridge:
+        schedule: rate(1 minute)
+  postHandler:
+    handler: bin/postHandler
+    events:
+    - eventBridge:
+        eventBus: { "Fn::GetAtt" : ["chatBus","Name"] }
+        pattern:
+          source:
+            - 'welcome'
+        
+resources:
+  Resources:
+    connectionIdTable:
+      Type: AWS::DynamoDB::Table
+      Properties: 
+        AttributeDefinitions: 
+          -   AttributeName: Id
+              AttributeType: S
+        BillingMode: PAY_PER_REQUEST
+        KeySchema: 
+          -   AttributeName: Id
+              KeyType: HASH
+        TableName: ${self:custom.dynamoTableName}
+    chatBus:
+      Type: AWS::Events::EventBus
+      Properties: 
+        Name: ${self:custom.chatBusName}
+
+
+
+
