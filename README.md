@@ -6,6 +6,10 @@ A simple example webchat API using AWS Apigateway
 <img src="https://github.com/darren-reddick/go-apigw-webchat/actions/workflows/cicd.yml/badge.svg?branch=main">
 </p>
 
+
+https://user-images.githubusercontent.com/57802771/160354279-fb4a817b-c990-49ea-98ad-169ab0d136c0.mov
+
+
 ## :city_sunrise: Overview
 
 This project provides a simple webchat service over a websocket API. Users can connect and send messages direct to other users or use a broadcast function to send a message to all users.
@@ -46,6 +50,8 @@ The stack output of the serverless deployment will list the **ServiceEndpointWeb
 
 
 ## :notebook_with_decorative_cover: Usage
+
+THe following examples use the wscat cli to use the webchat service. An alternative would be to use the piesocket online websocket client: https://www.piesocket.com/websocket-tester
 
 ### Connecting
 
