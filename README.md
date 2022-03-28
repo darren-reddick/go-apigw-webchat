@@ -7,7 +7,7 @@ A simple example webchat API using AWS Apigateway
 </p>
 
 
-https://user-images.githubusercontent.com/57802771/160354279-fb4a817b-c990-49ea-98ad-169ab0d136c0.mov
+[Usage](https://user-images.githubusercontent.com/57802771/160354279-fb4a817b-c990-49ea-98ad-169ab0d136c0.mov)
 
 
 ## :city_sunrise: Overview
