@@ -110,10 +110,6 @@ Send a message to a connection. Routes to the lambda **chatHandler** which sends
 
 These functions are part of the service but arent directly connected from apigateway routes. 
 
-### connectHandler
-
-Handles the initiation of the websocket connection from the client via apigateway. This involves persisting the connection id to the data store and pushes a welcome message to an event bus.
-
 ### postHandler
 
 Triggered by chat events from the chat eventbridge bus. Creates a message from the event and sends to the connected user. Initially this has been added to handle welcome messages which must be done asynchronously (a message cant be sent to the connection until it is established).
