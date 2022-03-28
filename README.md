@@ -14,8 +14,9 @@ A simple example webchat API using AWS Apigateway
 
 This project provides a simple webchat service over a websocket API. Users can connect and send messages direct to other users or use a broadcast function to send a message to all users.
 
-It is built solely on AWS services: Apigateway, Lambda, DynamoDB, Eventbridge and Cloudwatch.
+It is built solely using AWS services: Apigateway, Lambda, DynamoDB, Eventbridge and Cloudwatch.
 
+<img src="https://user-images.githubusercontent.com/57802771/160415219-18ccd032-4e14-4a16-8e9d-014847127605.png" width="700">
 
 ## :factory: Deployment
 
