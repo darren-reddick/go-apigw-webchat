@@ -4,3 +4,8 @@ node_modules/
 
 .vscode
 ./NOTES.md
+# Ignore serverless manifest files
+serverless.manifest.json
+.serverless/manifest.json
+
+.eslintrc.json

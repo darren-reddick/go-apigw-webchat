@@ -2,11 +2,13 @@ service: go-apigw-webchat
 
 plugins:
   - serverless-iam-roles-per-function
+  - serverless-manifest-plugin
 frameworkVersion: '2'
 
 provider:
   name: aws
   runtime: go1.x
+  stage: ${opt:stage, 'poc'}
   lambdaHashingVersion: 20201221
   region: eu-west-1
   websocketsApiName: chat-api
@@ -50,15 +52,17 @@ provider:
           ".",
           { "Ref": "AWS::URLSuffix" },
           "/",
-          "${opt:stage}"
+          "${self.custom.stage}"
       ]]
     }
     DYNAMO_DB_TABLE: ${self:custom.dynamoTableName}
 
 
 custom:
-  dynamoTableName: ConnectionIdTable-${opt:stage}
-  chatBusName: chatBus-${opt:stage}
+  dynamoTableName: ConnectionIdTable-${self:provider.stage}
+  chatBusName: chatBus-${self:provider.stage}
+  environment:
+    ${file(./environment/${self:provider.stage}.yaml)}
 
 package:
   patterns:
@@ -120,7 +124,20 @@ functions:
             - 'welcome'
         
 resources:
+  Conditions:
+    WebsocketIAMAuth:
+      Fn::Equals:
+      - ${self:custom.environment.iam_auth}
+      - true
   Resources:
+#    SconnectWebsocketsRoute:
+#      Type: "AWS::ApiGatewayV2::Route"
+#      Properties:
+#        AuthorizationType:
+#          Fn::If:
+#          - WebsocketIAMAuth
+#          - AWS_IAM
+#          - NONE
     connectionIdTable:
       Type: AWS::DynamoDB::Table
       Properties: 
@@ -136,6 +153,7 @@ resources:
       Type: AWS::Events::EventBus
       Properties: 
         Name: ${self:custom.chatBusName}
+
 
 
 
