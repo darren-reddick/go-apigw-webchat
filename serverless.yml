@@ -62,7 +62,7 @@ custom:
   dynamoTableName: ConnectionIdTable-${self:provider.stage}
   chatBusName: chatBus-${self:provider.stage}
   environment:
-    ${file(./environment/${self:provider.stage}.yaml)}
+    ${file(./environment/${self:provider.stage}.yaml), false}
 
 package:
   patterns:

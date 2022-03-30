@@ -38,6 +38,8 @@ A make target has been configured to build the binaries and deploy to AWS using 
 - Dynamodb table
 - Lambda functions
 
+AWS IAM authentication for the API is now supported - to enable this see the **Authentication** section below.
+
 ```
 make deploy
 ```
@@ -50,6 +52,8 @@ The stack output of the serverless deployment will list the **ServiceEndpointWeb
 ### Connecting
 
 Using wscat (ctrl-c to disconnect)
+
+See the **Authentication** section below for connecting to an IAM authenticated API.
 
 ```
 wscat -c [ServiceEndpointWebsocket]
@@ -73,6 +77,24 @@ The following actions can be done from within the wscat websocket session once c
 
 ```
 {"action":"chat","message":"Yo!"}
+```
+
+## Authentication
+
+Currently IAM authentication is supported for the websocket API for IAM users with the appropriate permissions on the API Gateway.
+
+This can be enabled by updating the **iam_auth** setting to **true** in the environment file for the stage. E.g. **environment/poc.yaml** for the **poc** stage.
+
+**NOTE**: if amending an existing API to enable authentication only the configuration of the API gets updated. The stage will need to be redeployed in the console for the authentication to activated for the deployment.
+
+The initial connection route request will need to be signed with aws4 to authenticate. A script has been provided for this.
+
+### Connecting
+
+Using the script provided to sign the request using **aws4**. This requires the AWS IAM user to be set up as a named profile and its name set in environment variable **AWS_PROFILE**.
+
+```
+./scripts/wsconnect_auth.sh [stage name]
 ```
 
 ## API Routes
@@ -114,6 +136,10 @@ Triggered by chat events from the chat eventbridge bus. Creates a message from t
 ### manageHandler
 
 Triggered by an eventbridge schedule to clean up connection ids from the database where the connection is no longer there.
+
+# :pig: Known Issues
+
+1. Serverless sometimes doesnt remove the API Gateway log group. This can be an issue if the project is redeployed with the same stage name and will fail with a message indicating that the log group already exists. To fix simply remove the log group manually using the console or the aws cli.
 
 
 

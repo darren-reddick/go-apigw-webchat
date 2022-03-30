@@ -3,7 +3,7 @@ bin
 node_modules/
 
 .vscode
-./NOTES.md
+NOTES.md
 # Ignore serverless manifest files
 serverless.manifest.json
 .serverless/manifest.json
