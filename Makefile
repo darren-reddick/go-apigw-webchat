@@ -15,7 +15,7 @@ clean:
 	rm -rf ./bin ./vendor go.sum
 
 deploy: build # clean build
-	sls deploy --verbose --stage=poc
+	npx sls deploy --verbose --stage=poc
 
 gomodgen:
 	chmod u+x gomod.sh

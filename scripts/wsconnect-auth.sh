@@ -21,7 +21,7 @@ required() {
 }
 
 # check required bins are installed
-required jq wscat node sls
+required jq node sls
 
 # use serverless manifest to fetch the ServiceEndpointWebsocket name
 wssurl=$(sls manifest --json --stage ${stage} | jq -r '.'${stage}'.outputs[] | select(.OutputKey == "ServiceEndpointWebsocket").OutputValue')
@@ -33,4 +33,4 @@ SIGN_SCRIPT="$(dirname $0)/aws4-sign.js"
 [ ! -f ${SIGN_SCRIPT} ] && { echo "ERROR: Script $SIGN_SCRIPT does not exist"; exit 1;  }
 
 # connect using wscat
-wscat -c $(node $SIGN_SCRIPT --url ${wssurl})
+npx wscat -c $(node $SIGN_SCRIPT --url ${wssurl})
