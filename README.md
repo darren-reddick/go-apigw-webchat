@@ -6,12 +6,17 @@ A simple example webchat API using AWS Apigateway
 <img src="https://github.com/darren-reddick/go-apigw-webchat/actions/workflows/cicd.yml/badge.svg?branch=main">
 </p>
 
+
+[Usage](https://user-images.githubusercontent.com/57802771/160354279-fb4a817b-c990-49ea-98ad-169ab0d136c0.mov)
+
+
 ## :city_sunrise: Overview
 
 This project provides a simple webchat service over a websocket API. Users can connect and send messages direct to other users or use a broadcast function to send a message to all users.
 
-It is built solely on AWS services: Apigateway, Lambda, DynamoDB, Eventbridge and Cloudwatch.
+It is built solely using AWS services: Apigateway, Lambda, DynamoDB, Eventbridge and Cloudwatch.
 
+<img src="https://user-images.githubusercontent.com/57802771/160415219-18ccd032-4e14-4a16-8e9d-014847127605.png" width="700">
 
 ## :factory: Deployment
 
@@ -48,6 +53,8 @@ The stack output of the serverless deployment will list the **ServiceEndpointWeb
 
 
 ## :notebook_with_decorative_cover: Usage
+
+THe following examples use the wscat cli to use the webchat service. An alternative would be to use the piesocket online websocket client: https://www.piesocket.com/websocket-tester
 
 ### Connecting
 
@@ -124,10 +131,6 @@ Send a message to a connection. Routes to the lambda **chatHandler** which sends
 ## Other Lambda functions
 
 These functions are part of the service but arent directly connected from apigateway routes. 
-
-### connectHandler
-
-Handles the initiation of the websocket connection from the client via apigateway. This involves persisting the connection id to the data store and pushes a welcome message to an event bus.
 
 ### postHandler
 
