@@ -3,43 +3,40 @@ service: go-apigw-webchat
 plugins:
   - serverless-iam-roles-per-function
   - serverless-manifest-plugin
-frameworkVersion: '2'
+frameworkVersion: '3'
 
 provider:
   name: aws
   runtime: go1.x
   stage: ${opt:stage, 'poc'}
-  lambdaHashingVersion: 20201221
   region: eu-west-1
   websocketsApiName: chat-api
   websocketsApiRouteSelectionExpression: $request.body.action # custom routes are selected by the value of the action property in the body
   logs:
     websocket: true
-  eventBridge:
-    useCloudFormation: true
   iam:
     role:
       managedPolicies:
       - 'arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess'
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:DescribeTable
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      # Restrict our IAM role permissions to
-      # the specific table for the stage
-      Resource:
-        - "Fn::GetAtt": [ connectionIdTable, Arn ]
-    - Effect: Allow
-      Action:
-        - events:PutEvents
-      Resource:
-        - "Fn::GetAtt": [ chatBus, Arn ]
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:DescribeTable
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          # Restrict our IAM role permissions to
+          # the specific table for the stage
+          Resource:
+            - "Fn::GetAtt": [ connectionIdTable, Arn ]
+        - Effect: Allow
+          Action:
+            - events:PutEvents
+          Resource:
+            - "Fn::GetAtt": [ chatBus, Arn ]
   environment:
     WEBSOCKET_URL: {
       "Fn::Join":["",[
@@ -118,7 +115,8 @@ functions:
     handler: bin/postHandler
     events:
     - eventBridge:
-        eventBus: { "Fn::GetAtt" : ["chatBus","Name"] }
+        eventBus: 
+          { "Fn::GetAtt" : ["chatBus",  "Name"] }
         pattern:
           source:
             - 'welcome'

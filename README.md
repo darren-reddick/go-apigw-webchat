@@ -23,12 +23,12 @@ It is built solely using AWS services: Apigateway, Lambda, DynamoDB, Eventbridge
 ### :page_facing_up: Prerequisites
 
 - [Go (>=1.17)](https://go.dev/doc/install)
-- [Serverless Framework 2](https://www.serverless.com/framework/docs/getting-started)
-- Nodejs + npm (for serverless framework)
+- Nodejs + npm >= 16
 - An AWS account and IAM user with permissions to deploy
-- wscat (optional for testing)
 
-### Installing packages for serverless
+### Installing packages
+
+Install node packages into project directory including serverless and wscat.
 
 ```
 npm install
@@ -63,7 +63,7 @@ Using wscat (ctrl-c to disconnect)
 See the **Authentication** section below for connecting to an IAM authenticated API.
 
 ```
-wscat -c [ServiceEndpointWebsocket]
+npx wscat -c [ServiceEndpointWebsocket]
 ```
 
 The following actions can be done from within the wscat websocket session once connected:
