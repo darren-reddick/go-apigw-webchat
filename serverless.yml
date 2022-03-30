@@ -52,7 +52,7 @@ provider:
           ".",
           { "Ref": "AWS::URLSuffix" },
           "/",
-          "${self.custom.stage}"
+          "${self:provider.stage}"
       ]]
     }
     DYNAMO_DB_TABLE: ${self:custom.dynamoTableName}
@@ -127,17 +127,17 @@ resources:
   Conditions:
     WebsocketIAMAuth:
       Fn::Equals:
-      - ${self:custom.environment.iam_auth}
+      - ${self:custom.environment.iam_auth, false}
       - true
   Resources:
-#    SconnectWebsocketsRoute:
-#      Type: "AWS::ApiGatewayV2::Route"
-#      Properties:
-#        AuthorizationType:
-#          Fn::If:
-#          - WebsocketIAMAuth
-#          - AWS_IAM
-#          - NONE
+    SconnectWebsocketsRoute:
+      Type: "AWS::ApiGatewayV2::Route"
+      Properties:
+        AuthorizationType:
+          Fn::If:
+          - WebsocketIAMAuth
+          - AWS_IAM
+          - NONE
     connectionIdTable:
       Type: AWS::DynamoDB::Table
       Properties: 
