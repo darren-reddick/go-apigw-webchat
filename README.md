@@ -36,14 +36,16 @@ npm install
 
 ### :wrench: Provisioning the websocket service in AWS
 
-A make target has been configured to build the binaries and deploy to AWS using the serverless framework. **The AWS IAM credentials for deploying should be set up in the environment to do this.**
+A make target has been configured to build the binaries and deploy to AWS using the serverless framework. This will deploy to a stage named **poc**. Other stages can be configured with the serverless definition file: serverless.yml
+
+**The AWS IAM credentials for deploying should be set up in the environment to do this.**
 
 **WARNING**: This will deploy the following resources to AWS which will incur costs:
 - APIGateway websocket API
 - Dynamodb table
 - Lambda functions
 
-AWS IAM authentication for the API is now supported - to enable this see the **Authentication** section below.
+
 
 ```
 make deploy
@@ -51,6 +53,7 @@ make deploy
 
 The stack output of the serverless deployment will list the **ServiceEndpointWebsocket** - make a note of this as it will be used to connect to the websocket API.
 
+AWS IAM authentication for the API is now supported - to enable this see the **Authentication** section below.
 
 ## :notebook_with_decorative_cover: Usage
 
