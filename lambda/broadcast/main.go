@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -27,12 +26,16 @@ type BroadcastRequest struct {
 
 func HandleConnect(ctx context.Context, request events.APIGatewayWebsocketProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var bc BroadcastRequest
-	json.Unmarshal([]byte(request.Body), &bc)
-
-	err := api.BroadcastMessage(bc.Message)
+	err := json.Unmarshal([]byte(request.Body), &bc)
 
 	if err != nil {
-		fmt.Println(err)
+		api.Logger.Error(err.Error())
+	}
+
+	err = api.BroadcastMessage(bc.Message)
+
+	if err != nil {
+		api.Logger.Error(err.Error())
 	}
 
 	return events.APIGatewayProxyResponse{

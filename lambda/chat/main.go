@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -42,10 +41,10 @@ func HandleConnect(ctx context.Context, request events.APIGatewayWebsocketProxyR
 		}, errors.New("No connection specified for message")
 	}
 
-	err := api.SendMessage(c.Connection, c.Message)
+	err = api.SendMessage(c.Connection, c.Message)
 
 	if err != nil {
-		fmt.Println(err)
+		api.Logger.Error(err.Error())
 	}
 
 	return events.APIGatewayProxyResponse{
