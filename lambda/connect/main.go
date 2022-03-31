@@ -28,6 +28,7 @@ func HandleConnect(ctx context.Context, request events.APIGatewayWebsocketProxyR
 	err := api.Connect(id)
 
 	if err != nil {
+		api.Logger.Error(err.Error())
 		msg = err.Error()
 	}
 

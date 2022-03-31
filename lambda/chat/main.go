@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -29,7 +28,11 @@ type ChatRequest struct {
 
 func HandleConnect(ctx context.Context, request events.APIGatewayWebsocketProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var c ChatRequest
-	json.Unmarshal([]byte(request.Body), &c)
+	err := json.Unmarshal([]byte(request.Body), &c)
+
+	if err != nil {
+		api.Logger.Error(err.Error())
+	}
 
 	if c.Connection == "" {
 		return events.APIGatewayProxyResponse{
@@ -38,10 +41,10 @@ func HandleConnect(ctx context.Context, request events.APIGatewayWebsocketProxyR
 		}, errors.New("No connection specified for message")
 	}
 
-	err := api.SendMessage(c.Connection, c.Message)
+	err = api.SendMessage(c.Connection, c.Message)
 
 	if err != nil {
-		fmt.Println(err)
+		api.Logger.Error(err.Error())
 	}
 
 	return events.APIGatewayProxyResponse{

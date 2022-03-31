@@ -89,7 +89,11 @@ func (api *ApigwWsApi) PurgeGone() error {
 			api.Logger.Error(t.Error())
 			if ok {
 				api.Logger.Debug(fmt.Sprintf("Removing connection %s from store", val))
-				api.Store.Remove(val)
+				err = api.Store.Remove(val)
+				if err != nil {
+					api.Logger.Error(t.Error())
+					return err
+				}
 			}
 		}
 

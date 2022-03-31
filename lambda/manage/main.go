@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -25,7 +24,7 @@ func HandleConnect(ctx context.Context, event events.CloudWatchEvent) (string, e
 	err := api.PurgeGone()
 
 	if err != nil {
-		fmt.Println(err)
+		api.Logger.Error(err.Error())
 		return "ERROR", err
 	}
 
