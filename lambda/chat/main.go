@@ -29,7 +29,11 @@ type ChatRequest struct {
 
 func HandleConnect(ctx context.Context, request events.APIGatewayWebsocketProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var c ChatRequest
-	json.Unmarshal([]byte(request.Body), &c)
+	err := json.Unmarshal([]byte(request.Body), &c)
+
+	if err != nil {
+		api.Logger.Error(err.Error())
+	}
 
 	if c.Connection == "" {
 		return events.APIGatewayProxyResponse{
