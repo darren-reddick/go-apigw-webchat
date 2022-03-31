@@ -6,7 +6,14 @@ import (
 	"github.com/darren-reddick/go-apigw-webchat/internal/event"
 	"github.com/darren-reddick/go-apigw-webchat/internal/mocks"
 	"github.com/darren-reddick/go-apigw-webchat/internal/store"
+	"go.uber.org/zap"
 )
+
+var logger *zap.Logger
+
+func init() {
+	logger, _ = zap.NewProduction()
+}
 
 func EqualStringSlice(a, b []string) bool {
 	if len(a) != len(b) {
@@ -85,6 +92,7 @@ func TestApigwWsApi_Connect(t *testing.T) {
 				Endpoint: tt.fields.Endpoint,
 				Session:  tt.fields.Session,
 				Bus:      tt.fields.Bus,
+				Logger:   logger,
 			}
 			if err := api.Connect(tt.args.id); err != nil {
 				t.Errorf("ApigwWsApi.Connect() error = %v", err)
@@ -154,6 +162,7 @@ func TestApigwWsApi_GetConnection(t *testing.T) {
 				Store:    tt.fields.Store,
 				Endpoint: tt.fields.Endpoint,
 				Session:  tt.fields.Session,
+				Logger:   logger,
 			}
 			if err := api.GetConnection(tt.args.id); (err != nil) != tt.wantErr {
 				t.Errorf("ApigwWsApi.GetConnection() error = %v, wantErr %v", err, tt.wantErr)
