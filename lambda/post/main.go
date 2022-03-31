@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -25,12 +24,16 @@ func init() {
 func HandleConnect(ctx context.Context, event events.CloudWatchEvent) (string, error) {
 
 	detail := e.ChatEvent{}
-	json.Unmarshal(event.Detail, &detail)
-
-	err := api.SendMessage(detail.ConnectionId, detail.Message)
+	err := json.Unmarshal(event.Detail, &detail)
 
 	if err != nil {
-		fmt.Println(err)
+		api.Logger.Error(err.Error())
+	}
+
+	err = api.SendMessage(detail.ConnectionId, detail.Message)
+
+	if err != nil {
+		api.Logger.Error(err.Error())
 		return "ERROR", err
 	}
 

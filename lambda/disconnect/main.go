@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -27,7 +26,7 @@ func HandleConnect(ctx context.Context, request events.APIGatewayWebsocketProxyR
 	err := api.Disconnect(id)
 
 	if err != nil {
-		fmt.Println(err)
+		api.Logger.Error(err.Error())
 	}
 
 	return events.APIGatewayProxyResponse{
