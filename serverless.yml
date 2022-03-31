@@ -53,6 +53,9 @@ provider:
       ]]
     }
     DYNAMO_DB_TABLE: ${self:custom.dynamoTableName}
+    CHAT_EVENT_BUS: ${self:custom.chatBusName}
+    LOG_LEVEL: ${self:custom.environment.log_level, ""}
+
 
 
 custom:
@@ -72,40 +75,26 @@ functions:
     events:
       - websocket:
           route: $connect
-    environment:
-      DYNAMO_DB_TABLE: ${self:custom.dynamoTableName}
-      CHAT_EVENT_BUS: ${self:custom.chatBusName}
   broadcastHandler:
     handler: bin/broadcastHandler
     events:
       - websocket:
           route: broadcast
-    environment:
-      DYNAMO_DB_TABLE: ${self:custom.dynamoTableName}
-      CHAT_EVENT_BUS: ${self:custom.chatBusName}
   listHandler:
     handler: bin/listHandler
     events:
       - websocket:
           route: list
-    environment:
-      DYNAMO_DB_TABLE: ${self:custom.dynamoTableName}
-      CHAT_EVENT_BUS: ${self:custom.chatBusName}
   chatHandler:
     handler: bin/chatHandler
     events:
       - websocket:
           route: chat
-    environment:
-      DYNAMO_DB_TABLE: ${self:custom.dynamoTableName}
-      CHAT_EVENT_BUS: ${self:custom.chatBusName}
   disconnectHandler:
     handler: bin/disconnectHandler
     events:
       - websocket:
           route: $disconnect
-    environment:
-      DYNAMO_DB_TABLE: ${self:custom.dynamoTableName}
   manageHandler:
     handler: bin/manageHandler
     events:
