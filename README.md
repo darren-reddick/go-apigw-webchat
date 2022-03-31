@@ -1,4 +1,4 @@
-# go-api-webchat
+# go-apigw-webchat
 
 A simple example webchat API using AWS Apigateway 
 
