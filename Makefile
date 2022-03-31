@@ -1,3 +1,5 @@
+STAGE ?= poc # set default stage for deployment if not passed from cmdline
+
 .PHONY: build clean deploy gomodgen
 
 build: gomodgen
@@ -15,7 +17,8 @@ clean:
 	rm -rf ./bin ./vendor go.sum
 
 deploy: build # clean build
-	npx sls deploy --verbose --stage=poc
+	@echo "Deploying stage $(STAGE)"
+	npx sls deploy --verbose --stage=$(STAGE)
 
 gomodgen:
 	chmod u+x gomod.sh

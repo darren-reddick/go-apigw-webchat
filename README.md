@@ -36,7 +36,9 @@ npm install
 
 ### :wrench: Provisioning the websocket service in AWS
 
-A make target has been configured to build the binaries and deploy to AWS using the serverless framework. This will deploy to a stage named **poc**. Other stages can be configured with the serverless definition file: serverless.yml
+A make target has been configured to build the binaries and deploy to AWS using the serverless framework. This will deploy to a named stage using the **STAGE** parameter. (stage is the equivalent of a deployment environment)
+
+Configuration for a stage should be set in a file named [stage].yaml in the **environment** directory. See the **example.yaml** file as an example. Not including an environment file will simply take the defaults for each setting.
 
 **The AWS IAM credentials for deploying should be set up in the environment to do this.**
 
@@ -45,10 +47,8 @@ A make target has been configured to build the binaries and deploy to AWS using 
 - Dynamodb table
 - Lambda functions
 
-
-
 ```
-make deploy
+make deploy STAGE=this
 ```
 
 The stack output of the serverless deployment will list the **ServiceEndpointWebsocket** - make a note of this as it will be used to connect to the websocket API.
@@ -106,6 +106,10 @@ Using the script provided to sign the request using **aws4**. This requires the 
 ```
 ./scripts/wsconnect_auth.sh [stage name]
 ```
+
+## Logging
+
+The zap structured logging package is used for logging. Debug logging can be enabled by setting the Lambda environment variable **LOG_LEVEL** to **DEBUG**. This can be set using the stage yaml files in the **environment** directory.
 
 ## API Routes
 

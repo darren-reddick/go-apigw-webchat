@@ -30,9 +30,7 @@ func (e *EventBridgeBus) Put(i interface{}) error {
 	})
 
 	events := eventbridge.PutEventsInput{Entries: entries}
-	output, err := e.Session.PutEvents(&events)
-
-	fmt.Printf("%+v\n", output)
+	_, err := e.Session.PutEvents(&events)
 
 	if err != nil {
 		fmt.Printf("%s", err)

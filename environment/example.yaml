@@ -1,0 +1,2 @@
+iam_auth: false # boolean to enable IAM authentication
+log_level: NONE # set to DEBUG to enable debug
