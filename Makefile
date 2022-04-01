@@ -1,20 +1,20 @@
 STAGE ?= poc # set default stage for deployment if not passed from cmdline
+FUNCTIONS = $(shell find lambda -type d -maxdepth 1 -mindepth 1 ! -name utils -exec basename {} \;)
+GO111MODULE = on
 
-.PHONY: build clean deploy gomodgen
+.PHONY: build clean deploy gomodgen build-%
 
-build: gomodgen
-	export GO111MODULE=on
-	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/connectHandler lambda/connect/main.go
-	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/disconnectHandler lambda/disconnect/main.go
-	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/manageHandler lambda/manage/main.go
-	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/postHandler lambda/post/main.go
-	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/broadcastHandler lambda/broadcast/main.go
-	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/listHandler lambda/list/main.go
-	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/chatHandler lambda/chat/main.go
+build: gomodgen $(addprefix build-,$(FUNCTIONS))
 
+build-%:
+	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/$*Handler lambda/$*/main.go
 
 clean:
 	rm -rf ./bin ./vendor go.sum
+
+remove:
+	@echo "Removing stage $(STAGE)"
+	npx sls remove --verbose --stage=$(STAGE)
 
 deploy: build # clean build
 	@echo "Deploying stage $(STAGE)"
