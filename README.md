@@ -48,12 +48,15 @@ Configuration for a stage should be set in a file named [stage].yaml in the **en
 - Lambda functions
 
 ```
+# example to deploy to stage 'this'
 make deploy STAGE=this
 ```
 
 The stack output of the serverless deployment will list the **ServiceEndpointWebsocket** - make a note of this as it will be used to connect to the websocket API.
 
 AWS IAM authentication for the API is now supported - to enable this see the **Authentication** section below.
+
+
 
 ## :notebook_with_decorative_cover: Usage
 
@@ -105,6 +108,13 @@ Using the script provided to sign the request using **aws4**. This requires the 
 
 ```
 ./scripts/wsconnect_auth.sh [stage name]
+```
+
+## :zombie: Removing the Deployment
+
+```
+# example to remove stage 'this'
+make remove STAGE=this
 ```
 
 ## Logging
