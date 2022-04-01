@@ -1,4 +1,7 @@
-on: [push]
+on:
+  push:
+    branches:
+      - main
 name: E2E
 jobs:
   golangci:
@@ -17,7 +20,8 @@ jobs:
           node-version: '16'
       - uses: actions/checkout@v3
       - run: make deploy STAGE=e2e
-      - run: |
+      - name: test
+        run: |
           set -e
           source scripts/funcs.sh
           export WEBSOCKET_URL=$(getWsUrl e2e)
