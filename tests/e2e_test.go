@@ -66,13 +66,15 @@ func TestConnect(t *testing.T) {
 
 	complete := false
 
+	re := regexp.MustCompile(`^Welcome! - connected on.*`)
+
 	for !complete {
 		select {
 		case <-time.After(time.Second * 30):
 			log.Print("Time out")
 			complete = true
 		case s := <-rcv:
-			if m, _ := regexp.MatchString(`^Welcome! - connected on.*`, s); m {
+			if m := re.Match([]byte(s)); m {
 				log.Print("Welcome message received")
 				complete = true
 			}
@@ -80,7 +82,7 @@ func TestConnect(t *testing.T) {
 		}
 	}
 
-	err = c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+	_ = c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
 
 	select {
 	case <-done:
