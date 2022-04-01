@@ -1,5 +1,7 @@
 #!/usr/bin/env bash -e
 
+source "$(dirname $0)/funcs.sh"
+
 script="${0##*/}"
 usage="USAGE: $script [sls project stage]
 
@@ -24,7 +26,7 @@ required() {
 required jq node sls
 
 # use serverless manifest to fetch the ServiceEndpointWebsocket name
-wssurl=$(sls manifest --json --stage ${stage} | jq -r '.'${stage}'.outputs[] | select(.OutputKey == "ServiceEndpointWebsocket").OutputValue')
+wssurl=$(getWsUrl ${stage})
 
 echo "Building signed url for $wssurl using aws profile [${AWS_PROFILE}]"
 
