@@ -1,0 +1,31 @@
+on:
+  push:
+    branches:
+      - main
+name: E2E
+jobs:
+  golangci:
+    name: e2etest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/e2e'
+    steps:
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.17.0'
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - uses: actions/checkout@v3
+      - run: make deploy STAGE=e2e
+      - name: test
+        run: |
+          set -e
+          source scripts/funcs.sh
+          export WEBSOCKET_URL=$(getWsUrl e2e)
+          go test ./tests -v
+      - name: cleanup stage
+        run: make remove STAGE=e2e
+        if: always()
