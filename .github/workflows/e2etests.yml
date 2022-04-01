@@ -18,6 +18,8 @@ jobs:
       - uses: actions/checkout@v3
       - run: make deploy STAGE=e2e
       - run: source scripts/funcs.sh
-      - run: export WEBSOCKET_URL=$$(getWsUrl e2etest)
+      - run: export WEBSOCKET_URL=$(getWsUrl e2etest)
       - run: go test ./tests -v
-      - run: make remove STAGE=e2e
+      - name: cleanup stack
+        run: make remove STAGE=e2e
+        if: always()
