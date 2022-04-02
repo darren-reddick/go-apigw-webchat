@@ -43,7 +43,7 @@ func TestConnect(t *testing.T) {
 
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {
-		log.Fatal("dial:", err)
+		t.Error("dial:", err)
 	}
 	defer c.Close()
 
@@ -55,8 +55,7 @@ func TestConnect(t *testing.T) {
 		for {
 			_, message, err := c.ReadMessage()
 			if err != nil {
-				log.Println("read:", err)
-				return
+				t.Error("read:", err)
 			}
 			log.Printf("recv: %s", message)
 			rcv <- string(message)
@@ -71,7 +70,7 @@ func TestConnect(t *testing.T) {
 	for !complete {
 		select {
 		case <-time.After(time.Second * 30):
-			log.Print("Time out")
+			t.Error("Time out")
 			complete = true
 		case s := <-rcv:
 			if m := re.Match([]byte(s)); m {
@@ -82,7 +81,11 @@ func TestConnect(t *testing.T) {
 		}
 	}
 
-	_ = c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+	err = c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+
+	if err != nil {
+		t.Error(err)
+	}
 
 	select {
 	case <-done:
