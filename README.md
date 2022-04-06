@@ -107,7 +107,7 @@ The initial connection route request will need to be signed with aws4 to authent
 Using the script provided to sign the request using **aws4**. This requires the AWS IAM user to be set up as a named profile and its name set in environment variable **AWS_PROFILE**.
 
 ```
-./scripts/wsconnect_auth.sh [stage name]
+./scripts/wsconnect-auth.sh [stage name]
 ```
 
 ## :zombie: Removing the Deployment

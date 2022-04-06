@@ -35,5 +35,5 @@ test:
 	go test -v github.com/darren-reddick/go-apigw-webchat/internal/...
 
 e2etest:
-	$(MAKE) deploy STAGE=e2etest --region $(REGION)
-	source scripts/funcs.sh; export WEBSOCKET_URL=$$(getWsUrl e2etest); go test ./tests -v
+	$(MAKE) deploy STAGE=e2etest
+	WEBSOCKET_URL=$$(node ./scripts/get-websocket-url.js --stage e2etest) go test ./tests -v

@@ -26,7 +26,7 @@ required() {
 required jq node sls
 
 # use serverless manifest to fetch the ServiceEndpointWebsocket name
-wssurl=$(getWsUrl ${stage})
+wssurl=$(node ./scripts/get-websocket-url.js --stage ${stage})
 
 echo "Building signed url for $wssurl using aws profile [${AWS_PROFILE}]"
 
