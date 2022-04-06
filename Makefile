@@ -37,3 +37,6 @@ test:
 e2etest:
 	$(MAKE) deploy STAGE=e2etest
 	WEBSOCKET_URL=$$(node ./scripts/get-websocket-url.js --stage e2etest) go test ./tests -v
+
+removee2eenv:
+	$(MAKE) remove STAGE=e2etest
