@@ -21,7 +21,7 @@ jobs:
       - name: Create e2etest env
         run: make deploy STAGE=e2etest
       - name: Run e2etests
-        run: make e2etest
+        run: make e2etest STAGE=e2etest
       - name: Remove e2etest env
         run: make remove STAGE=e2etest
         if: always()

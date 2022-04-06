@@ -10,18 +10,6 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-// func BuildApi() *zap.Logger {
-//
-// 	cfg := zap.NewProductionConfig()
-//
-// 	if os.Getenv("LOG_LEVEL") == "DEBUG" {
-// 		cfg.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
-// 	}
-//
-// 	return cfg.Build()
-//
-// }
-
 func BuildApi() *websocket.ApigwWsApi {
 	cfg := zap.NewProductionConfig()
 	if os.Getenv("LOG_LEVEL") == "DEBUG" {
