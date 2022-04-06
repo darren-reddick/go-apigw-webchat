@@ -4,6 +4,7 @@ A simple example webchat API using AWS Apigateway
 
 <p align="left">
 <img src="https://github.com/darren-reddick/go-apigw-webchat/actions/workflows/cicd.yml/badge.svg?branch=main">
+<img src="https://github.com/darren-reddick/go-apigw-webchat/actions/workflows/e2etests.yml/badge.svg?branch=main">
 </p>
 
 
@@ -107,7 +108,7 @@ The initial connection route request will need to be signed with aws4 to authent
 Using the script provided to sign the request using **aws4**. This requires the AWS IAM user to be set up as a named profile and its name set in environment variable **AWS_PROFILE**.
 
 ```
-./scripts/wsconnect_auth.sh [stage name]
+./scripts/wsconnect-auth.sh [stage name]
 ```
 
 ## :zombie: Removing the Deployment
