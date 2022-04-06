@@ -9,7 +9,6 @@ provider:
   name: aws
   runtime: go1.x
   stage: ${opt:stage, 'poc'}
-  region: eu-west-1
   websocketsApiName: chat-api
   websocketsApiRouteSelectionExpression: $request.body.action # custom routes are selected by the value of the action property in the body
   logs:
