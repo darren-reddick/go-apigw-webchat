@@ -4,6 +4,7 @@ A simple example webchat API using AWS Apigateway
 
 <p align="left">
 <img src="https://github.com/darren-reddick/go-apigw-webchat/actions/workflows/cicd.yml/badge.svg?branch=main">
+<img src="https://github.com/darren-reddick/go-apigw-webchat/actions/workflows/e2etests.yml/badge.svg?branch=main">
 </p>
 
 
