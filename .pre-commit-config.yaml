@@ -1,0 +1,17 @@
+repos:
+  - repo: local
+    hooks:
+      - id: golangci-lint
+        name: golangci-lint
+        description: Fast linters runner for Go.
+        entry: golangci-lint run
+        types: [go]
+        language: golang
+        pass_filenames: false
+      - id: gofmt
+        name: gofmt
+        description: Go formatting
+        entry: gofmt -l .
+        types: [go]
+        language: golang
+        pass_filenames: false

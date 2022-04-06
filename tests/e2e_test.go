@@ -53,11 +53,7 @@ func TestConnect(t *testing.T) {
 	go func() {
 		defer close(done)
 		for {
-			_, message, err := c.ReadMessage()
-			if err != nil {
-				t.Error("read:", err)
-			}
-			log.Printf("recv: %s", message)
+			_, message, _ := c.ReadMessage()
 			rcv <- string(message)
 
 		}

@@ -159,7 +159,7 @@ Triggered by an eventbridge schedule to clean up connection ids from the databas
 
 # :pig: Known Issues
 
-1. Serverless sometimes doesnt remove the API Gateway log group. This can be an issue if the project is redeployed with the same stage name and will fail with a message indicating that the log group already exists. To fix simply remove the log group manually using the console or the aws cli.
+1. Serverless sometimes doesnt remove the API Gateway log group. This can be an issue if the project is redeployed with the same stage name and will fail with a message indicating that the log group already exists. To fix simply remove the log group manually using the console or the aws cli. (see Makefile **remove** target)
 
 
 
