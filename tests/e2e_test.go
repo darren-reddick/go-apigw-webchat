@@ -66,7 +66,6 @@ func TestConnect(t *testing.T) {
 	for !complete {
 		select {
 		case <-time.After(time.Second * 30):
-			t.Error("Time out")
 			complete = true
 		case s := <-rcv:
 			if m := re.Match([]byte(s)); m {
@@ -77,11 +76,7 @@ func TestConnect(t *testing.T) {
 		}
 	}
 
-	err = c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
-
-	if err != nil {
-		t.Error(err)
-	}
+	_ = c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
 
 	select {
 	case <-done:
