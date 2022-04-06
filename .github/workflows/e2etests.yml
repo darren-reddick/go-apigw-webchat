@@ -18,8 +18,10 @@ jobs:
         with:
           node-version: '16'
       - uses: actions/checkout@v3
-      - name: test
+      - name: Create e2etest env
+        run: make deploy STAGE=e2etest
+      - name: Run e2etests
         run: make e2etest
-      - name: cleanup stage
-        run: make removee2eenv
+      - name: Remove e2etest env
+        run: make remove STAGE=e2etest
         if: always()
