@@ -77,7 +77,11 @@ func TestConnect(t *testing.T) {
 		}
 	}
 
-	_ = c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+	err = c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+
+	if err != nil {
+		t.Error(err)
+	}
 
 	select {
 	case <-done:
