@@ -18,13 +18,8 @@ jobs:
         with:
           node-version: '16'
       - uses: actions/checkout@v3
-      - run: make deploy STAGE=e2e
       - name: test
-        run: |
-          set -e
-          source scripts/funcs.sh
-          export WEBSOCKET_URL=$(getWsUrl e2e)
-          go test ./tests -v
+        run: make e2etest
       - name: cleanup stage
         run: make remove STAGE=e2e
         if: always()
