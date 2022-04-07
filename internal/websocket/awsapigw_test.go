@@ -14,6 +14,7 @@ var logger *zap.Logger
 
 func init() {
 	logger, _ = zap.NewProduction()
+
 }
 
 func EqualStringSlice(a, b []string) bool {
