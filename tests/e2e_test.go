@@ -28,6 +28,7 @@ func setup() error {
 
 func TestMain(m *testing.M) {
 	err := setup()
+
 	if err != nil {
 		fmt.Printf("Test setup failed: %s\n", err)
 		os.Exit(1)
@@ -35,11 +36,21 @@ func TestMain(m *testing.M) {
 	m.Run()
 }
 
-func TestConnect(t *testing.T) {
+func TestConnectUnauth(t *testing.T) {
+
+	unsigned := fmt.Sprintf("%s://%s%s", u.Scheme, u.Host, u.Path)
+
+	_, _, err := websocket.DefaultDialer.Dial(unsigned, nil)
+
+	if err == nil {
+		t.Error("Unauthenticated access connected - this should fail with a 403")
+	}
+
+}
+
+func TestConnectAuth(t *testing.T) {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
-
-	log.Printf("connecting to %s", u.String())
 
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {

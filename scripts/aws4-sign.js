@@ -7,9 +7,20 @@ const { argv } = require('yargs/yargs')(process.argv.slice(2))
   .demandOption(['url'])
   .alias('u', 'url');
 
-if (!process.env.AWS_PROFILE) {
-  // eslint-disable-next-line no-console
-  console.error('ERROR: AWS_PROFILE environment variable not set');
+let credentials;
+
+if ((process.env.AWS_ACCESS_KEY_ID) && (process.env.AWS_SECRET_ACCESS_KEY)) {
+  credentials = {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  };
+} else if (process.env.AWS_PROFILE) {
+  credentials = {
+    accessKeyId: AWS.config.credentials.accessKeyId,
+    secretAccessKey: AWS.config.credentials.secretAccessKey,
+  };
+} else {
+  console.error('ERROR: No credentials for signing detected in the environment');
   process.exit(1);
 }
 
@@ -19,11 +30,6 @@ const options = {
   host: url.host,
   path: url.pathname,
   signQuery: true,
-};
-
-const credentials = {
-  accessKeyId: AWS.config.credentials.accessKeyId,
-  secretAccessKey: AWS.config.credentials.secretAccessKey,
 };
 
 const sign = aws4.sign(options, credentials);

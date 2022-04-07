@@ -35,5 +35,7 @@ test:
 	go test -v github.com/darren-reddick/go-apigw-webchat/internal/...
 
 e2etest:
-	WEBSOCKET_URL=$$(node ./scripts/get-websocket-url.js --stage $(STAGE)) go test ./tests -v
+	export WEBSOCKET_URL=$$(node ./scripts/aws4-sign.js --url $$(node ./scripts/get-websocket-url.js --stage $(STAGE))); go test ./tests -v
+
+
 
