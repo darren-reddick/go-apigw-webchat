@@ -1,7 +1,5 @@
 #!/usr/bin/env bash -e
 
-source "$(dirname $0)/funcs.sh"
-
 script="${0##*/}"
 usage="USAGE: $script [sls project stage]
 
@@ -23,7 +21,7 @@ required() {
 }
 
 # check required bins are installed
-required jq node sls
+required sls
 
 # use serverless manifest to fetch the ServiceEndpointWebsocket name
 wssurl=$(node ./scripts/get-websocket-url.js --stage ${stage})
