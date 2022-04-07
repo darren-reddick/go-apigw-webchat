@@ -10,13 +10,11 @@ const { argv } = require('yargs/yargs')(process.argv.slice(2))
 let credentials;
 
 if ((process.env.AWS_ACCESS_KEY_ID) && (process.env.AWS_SECRET_ACCESS_KEY)) {
-  console.log('AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY detected in the environment - will use these for signing');
   credentials = {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   };
 } else if (process.env.AWS_PROFILE) {
-  console.log('Found AWS_PROFILE in environment - will use this for signing');
   credentials = {
     accessKeyId: AWS.config.credentials.accessKeyId,
     secretAccessKey: AWS.config.credentials.secretAccessKey,
