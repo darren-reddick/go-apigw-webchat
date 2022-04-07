@@ -14,7 +14,14 @@ func BuildApi() *websocket.ApigwWsApi {
 	cfg := zap.NewProductionConfig()
 	if os.Getenv("LOG_LEVEL") == "DEBUG" {
 		cfg.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
+		ec := cfg.EncoderConfig
+		ec.TimeKey = "timestamp"
+		ec.FunctionKey = "function"
+		ec.EncodeTime = zapcore.ISO8601TimeEncoder
+		cfg.EncoderConfig = ec
 	}
+	cfg.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
+
 	logger, _ := cfg.Build()
 
 	return websocket.NewApigwWsApi(
