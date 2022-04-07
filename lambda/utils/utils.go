@@ -12,15 +12,16 @@ import (
 
 func BuildApi() *websocket.ApigwWsApi {
 	cfg := zap.NewProductionConfig()
-	if os.Getenv("LOG_LEVEL") == "DEBUG" {
+
+	ec := cfg.EncoderConfig
+	ec.TimeKey = "timestamp"
+	ec.FunctionKey = "function"
+	ec.EncodeTime = zapcore.ISO8601TimeEncoder
+	cfg.EncoderConfig = ec
+
+	if val, exist := os.LookupEnv("LOG_LEVEL"); val == "DEBUG" && exist {
 		cfg.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
-		ec := cfg.EncoderConfig
-		ec.TimeKey = "timestamp"
-		ec.FunctionKey = "function"
-		ec.EncodeTime = zapcore.ISO8601TimeEncoder
-		cfg.EncoderConfig = ec
 	}
-	cfg.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
 
 	logger, _ := cfg.Build()
 
