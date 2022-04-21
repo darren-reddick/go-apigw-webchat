@@ -7,7 +7,7 @@
     "aws": "^0.0.3-2",
     "aws-sdk": "^2.1102.0",
     "aws4": "^1.11.0",
-    "serverless": "^3.10.0",
+    "serverless": "^3.10.1",
     "serverless-iam-roles-per-function": "^3.2.0",
     "serverless-manifest-plugin": "^1.0.9",
     "url": "^0.11.0",
